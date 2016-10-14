@@ -5,19 +5,27 @@
 #include <getopt.h>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <stdio.h>
+#include <string.h>
+using namespace std;
 //#include <unistd.h>
 
 
 #define no_argument 0
 #define required_argument 1
 #define optional_argument 2
+/*
+* Essa função recebe um arquivo e um vetor de strings 
+* salvando as linhas dos arquivos como itens do vetor.
+* 
+* @param filePipe nome do arquivo passado por linha de comando
+* @param lines vetor de strings
+*/
+void openFile(char** filePipe, std::vector<std::string> *lines){
+	//std::vector<std::string> lines;
 
-void openFile(char** filePipe){
-	std::vector<std::string> lines;
-
-    //std::istringstream iss;
 	std::ifstream filePine;
-	std::string namefile;
 	std::string line;
 
     filePine.open(*filePipe);
@@ -28,17 +36,15 @@ void openFile(char** filePipe){
 		std::cout << "Prosseguindo operação: " << std::endl;
 		while(!filePine.eof()){
 			getline(filePine, line);
-			//std::cout << line << std::endl;
-			lines.push_back(line);
-		}
-		for (unsigned int i = 0; i < lines.size(); i++){
-			std::cout << lines[i] << std::endl;
+			// Retira as vírgulas do arquivo de entrada
+			line.erase(std::remove(line.begin(), line.end(),','), line.end());
+			lines->push_back(line);
 		}
 	}
 	filePine.close();
 }
 
-
+// Usar essa lógica para adicionar nos vetores (ver se da certo)
 void instruction(std::string string_0, std::string string1, std::string string2, std::string string3){
 	std::string string0 = string_0;
 	std::string dest;
@@ -96,8 +102,10 @@ void ajuda(){
 	std::cout << "-i" << "     "<<"<nome_arquivo>" << "Insere arquivo contendo lista de instruções" << std::endl;
 }
 
-int main(int argc, char * argv[]){
 
+int main(int argc, char * argv[]){
+	std::string teste;
+	std::vector<std::string> lines;
 	const struct option longopts[] = {
 	    {"inserir",        required_argument,        0, 'i'},
     	{0,0,0,0},
@@ -118,7 +126,7 @@ int main(int argc, char * argv[]){
 				}
 				iflag = true;
 				index = optind;
-				openFile(&argv[index]);
+				openFile(&argv[index], &lines);
 				break;
 			case '?':
 				std::cout << "Comando inválido" << std::endl;
@@ -126,6 +134,11 @@ int main(int argc, char * argv[]){
 				break;
 		}
 	}
+	for (unsigned int i = 0; i < lines.size(); i++){
+			std::cout << lines[i] << std::endl;
+	}
+	teste = atoi(lines[0].c_str());
+	std::cout << teste << std::endl;
 	return 0;
 }
 
