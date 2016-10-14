@@ -4,7 +4,7 @@
 #include <sstream>
 #include <getopt.h>
 #include <string>
-
+#include <vector>
 //#include <unistd.h>
 
 
@@ -13,9 +13,12 @@
 #define optional_argument 2
 
 void openFile(char** filePipe){
-    std::istringstream iss;
-	std::fstream filePine;
+	std::vector<std::string> lines;
+
+    //std::istringstream iss;
+	std::ifstream filePine;
 	std::string namefile;
+	std::string line;
 
     filePine.open(*filePipe);
     if (!filePine.is_open()){
@@ -23,12 +26,18 @@ void openFile(char** filePipe){
     }else{
 		std::cout << "Arquivo " << *filePipe << " foi encontrado" << std::endl;
 		std::cout << "Prosseguindo operação: " << std::endl;
+		while(!filePine.eof()){
+			getline(filePine, line);
+			//std::cout << line << std::endl;
+			lines.push_back(line);
+		}
+		for (unsigned int i = 0; i < lines.size(); i++){
+			std::cout << lines[i] << std::endl;
+		}
 	}
+	filePine.close();
 }
 
-void print(){
-    std::cout << "Printou" << std::endl;
-}
 
 void instruction(std::string string_0, std::string string1, std::string string2, std::string string3){
 	std::string string0 = string_0;
