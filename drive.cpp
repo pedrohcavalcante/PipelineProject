@@ -51,18 +51,31 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 					instruc.push_back(token);
 					aux++;
 				}else if (aux == 1){
-
 					if (instruc[instruc.size()-1] == syscall){
 						 op1.push_back("$v0");
 					}else if (instruc[instruc.size()-1] == "mult"){
-						save = token;
 						op1.push_back("HI");
+						op2.push_back(token);
+						aux++;
+						//op2.push_back(token);
 					}else if(instruc[instruc.size()-1] == "div"){
 						op1.push_back("LO");
+						op2.push_back(token);
+						aux++;
 					}else if (instruc[instruc.size()-1] == "mfhi"){
-						op1.push_back("LO");
-					}else  if (instruc[instruc.size()-1] == "j"){
+						op1.push_back(token);
+						op2.push_back("HI");
+						op3.push_back("\0");
+						break;
+					}else if (instruc[instruc.size()-1] == "j"){
 						op1.push_back("LABEL");
+						op2.push_back("\0");
+						op3.push_back("\0");
+						break;
+					}else if(instruc[instruc.size()-1] == "lw"){
+						op2.push_back(token);
+					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
+						op2.push_back(token);
 					}else{
 						op1.push_back(token);
 					}
@@ -71,13 +84,14 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 				}else if(aux == 2){
 					if (instruc[instruc.size()-1] == syscall){
 						 op2.push_back("$v0");
-					}else if (instruc[instruc.size()-1] == "mfhi"){
-						op2.push_back("\0");
-					}else  if (instruc[instruc.size()-1] == "j"){
-						op2.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "mult"){
 						save2 = token;
 						op2.push_back(save);
+					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
+						op3.push_back(token);
+					}else if(instruc[instruc.size()-1] == "lw"){
+						op1.push_back(token);
+						break;
 					}else{
 						op2.push_back(token);
 					}
@@ -91,7 +105,13 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 					 }else if(instruc[instruc.size()-1] == "mfhi"){
 						op3.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "mult"){
-						op3.push_back(save2);
+						op3.push_back(token);
+					}else if(instruc[instruc.size()-1] == "div"){
+						op3.push_back(token);
+					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
+						op1.push_back(token);
+					}else if(instruc[instruc.size()-1] == "lw"){
+						op3.push_back(token);
 					}else{
 						op3.push_back(token);
 					}
