@@ -48,13 +48,17 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 			int aux = 0;
 			while (ss >> token){
 				if (aux == 0){
-					instruc.push_back(token);
 					aux++;
+					instruc.push_back(token);
+					
 				}else if (aux == 1){
+					//std::cout << instruc[instruc.size()-1] << std::endl;
 					if (instruc[instruc.size()-1] == "syscall"){
+						std::cout << "SYSCALL" << std::endl;
 						 op1.push_back("$v0");
 						 op2.push_back("$v0");
 						 op3.push_back("\0");
+						 //break;
 					}else if (instruc[instruc.size()-1] == "mult"){
 						op1.push_back("HI");
 						op2.push_back(token);
@@ -85,14 +89,17 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 						op1.push_back(token);
 					}else{
 						//op1.push_back(token);
+						cout << "grande else" << endl;
 					}
 					//op1.push_back(token);
 					aux++;
 				}else if(aux == 2){
 					if (instruc[instruc.size()-1] == "syscall"){
-						 op1.push_back("$v0");
+						 /*op1.push_back("$v0");
+						 
+						 op3.push_back("\0");*/
+						 std::cout << "SYSCALL" << std::endl;
 						 op2.push_back("$v0");
-						 op3.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "mult"){
 						save2 = token;
 						op2.push_back(save);
@@ -105,15 +112,18 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 					}else if( instruc[instruc.size()-1] == "sub"){
 						op2.push_back(token);
 					}else{
+						cout << "grande else" << endl;
 						//op2.push_back(token);
 					}
 					aux++;
 
 				}else if(aux == 3){
 					if (instruc[instruc.size()-1] == "syscall"){
-						 op1.push_back("$v0");
+						 /*op1.push_back("$v0");
 						 op2.push_back("$v0");
+						 op3.push_back("\0");*/
 						 op3.push_back("\0");
+						 std::cout << "SYSCALL" << std::endl;
 					}else if (instruc[instruc.size()-1] == "j"){
 						//op3.push_back("\0");
 					 }else if(instruc[instruc.size()-1] == "mfhi"){
@@ -130,6 +140,7 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 						op3.push_back(token);
 					}else{
 						//op3.push_back(token);
+						cout << "grande else" << endl;
 					}
 					aux++;
 				}else{
@@ -140,6 +151,7 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 		}
 	}
 	for (unsigned int j = 0; j < instruc.size(); j++){
+		
 		std::cout << instruc[j] << std::endl;
 		std::cout << op1[j] << std::endl;
 		std::cout << op2[j] << std::endl;
@@ -242,8 +254,6 @@ int main(int argc, char * argv[]){
 	for (unsigned int i = 0; i < lines.size(); i++){
 			std::cout << lines[i] << std::endl;
 	}
-	teste = atoi(lines[0].c_str());
-	std::cout << teste << std::endl;
 	return 0;
 }
 

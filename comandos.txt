@@ -1,0 +1,7 @@
+j INICIO
+syscall
+addi $v0, $zero, 5
+add $t5, $t7, $zero
+j FORA
+j DENTRO
+j EXIT
