@@ -51,8 +51,10 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 					instruc.push_back(token);
 					aux++;
 				}else if (aux == 1){
-					if (instruc[instruc.size()-1] == syscall){
+					if (instruc[instruc.size()-1] == "syscall"){
 						 op1.push_back("$v0");
+						 op2.push_back("$v0");
+						 op3.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "mult"){
 						op1.push_back("HI");
 						op2.push_back(token);
@@ -68,40 +70,52 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 						op3.push_back("\0");
 						break;
 					}else if (instruc[instruc.size()-1] == "j"){
-						op1.push_back("LABEL");
+						op1.push_back(token);
 						op2.push_back("\0");
 						op3.push_back("\0");
 						break;
 					}else if(instruc[instruc.size()-1] == "lw"){
-						op1.push_back(token);
+						op2.push_back(token);
 						op3.push_back("\0");
 					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
 						op2.push_back(token);
-					}else{
+					}else if(instruc[instruc.size()-1] == "add" || instruc[instruc.size()-1] == "addi"){
 						op1.push_back(token);
+					}else if( instruc[instruc.size()-1] == "sub"){
+						op1.push_back(token);
+					}else{
+						//op1.push_back(token);
 					}
 					//op1.push_back(token);
 					aux++;
 				}else if(aux == 2){
-					if (instruc[instruc.size()-1] == syscall){
+					if (instruc[instruc.size()-1] == "syscall"){
+						 op1.push_back("$v0");
 						 op2.push_back("$v0");
+						 op3.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "mult"){
 						save2 = token;
 						op2.push_back(save);
 					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
 						op3.push_back(token);
 					}else if(instruc[instruc.size()-1] == "lw"){
+						op1.push_back(token);
+					}else if(instruc[instruc.size()-1] == "add" || instruc[instruc.size()-1] == "addi"){
+						op2.push_back(token);
+					}else if( instruc[instruc.size()-1] == "sub"){
 						op2.push_back(token);
 					}else{
-						op2.push_back(token);
+						//op2.push_back(token);
 					}
 					aux++;
 
 				}else if(aux == 3){
-					if (instruc[instruc.size()-1] == syscall){
+					if (instruc[instruc.size()-1] == "syscall"){
+						 op1.push_back("$v0");
+						 op2.push_back("$v0");
 						 op3.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "j"){
-						op3.push_back("\0");
+						//op3.push_back("\0");
 					 }else if(instruc[instruc.size()-1] == "mfhi"){
 						op3.push_back("\0");
 					}else if (instruc[instruc.size()-1] == "mult"){
@@ -110,8 +124,12 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 						op3.push_back(token);
 					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
 						op1.push_back(token);
-					}else{
+					}else if(instruc[instruc.size()-1] == "add" || instruc[instruc.size()-1] == "addi"){
 						op3.push_back(token);
+					}else if( instruc[instruc.size()-1] == "sub"){
+						op3.push_back(token);
+					}else{
+						//op3.push_back(token);
 					}
 					aux++;
 				}else{
