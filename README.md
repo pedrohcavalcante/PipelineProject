@@ -2,7 +2,7 @@
 
 ## Como compilar
 
-g++ -Wall drive.cpp -o arquivo_de_saída
+g++ -Wall drive.cpp -o saída
 
-./arquivo_de_saída -i arquivo_de_comandos
+./saída -i comandos.txt
 
