@@ -73,7 +73,8 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 						op3.push_back("\0");
 						break;
 					}else if(instruc[instruc.size()-1] == "lw"){
-						op2.push_back(token);
+						op1.push_back(token);
+						op3.push_back("\0");
 					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
 						op2.push_back(token);
 					}else{
@@ -90,8 +91,7 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
 						op3.push_back(token);
 					}else if(instruc[instruc.size()-1] == "lw"){
-						op1.push_back(token);
-						break;
+						op2.push_back(token);
 					}else{
 						op2.push_back(token);
 					}
@@ -110,8 +110,6 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 						op3.push_back(token);
 					}else if(instruc[instruc.size()-1] == "beq" || instruc[instruc.size()-1] == "bne"){
 						op1.push_back(token);
-					}else if(instruc[instruc.size()-1] == "lw"){
-						op3.push_back(token);
 					}else{
 						op3.push_back(token);
 					}
