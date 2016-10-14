@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <cstring>
 #include <sstream>
 #include <getopt.h>
 #include <string>
@@ -24,10 +25,12 @@ using namespace std;
 */
 void openFile(char** filePipe, std::vector<std::string> *lines){
 	//std::vector<std::string> lines;
-
+	std::vector<std::string> instruc, op1, op2, op3;
+	string syscall  = "syscall";
 	std::ifstream filePine;
 	std::string line;
-
+					string save;
+					string save2;
     filePine.open(*filePipe);
     if (!filePine.is_open()){
         std::cout << "Arquivo " << *filePipe << " não foi encontrado" << std::endl;
@@ -39,7 +42,73 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 			// Retira as vírgulas do arquivo de entrada
 			line.erase(std::remove(line.begin(), line.end(),','), line.end());
 			lines->push_back(line);
+			std::string teste = {"oi oi1 oi2 oi3"};
+			std::istringstream ss {line};
+			string token;
+			int aux = 0;
+			while (ss >> token){
+				if (aux == 0){
+					instruc.push_back(token);
+					aux++;
+				}else if (aux == 1){
+
+					if (instruc[instruc.size()-1] == syscall){
+						 op1.push_back("$v0");
+					}else if (instruc[instruc.size()-1] == "mult"){
+						save = token;
+						op1.push_back("HI");
+					}else if(instruc[instruc.size()-1] == "div"){
+						op1.push_back("LO");
+					}else if (instruc[instruc.size()-1] == "mfhi"){
+						op1.push_back("LO");
+					}else  if (instruc[instruc.size()-1] == "j"){
+						op1.push_back("LABEL");
+					}else{
+						op1.push_back(token);
+					}
+					//op1.push_back(token);
+					aux++;
+				}else if(aux == 2){
+					if (instruc[instruc.size()-1] == syscall){
+						 op2.push_back("$v0");
+					}else if (instruc[instruc.size()-1] == "mfhi"){
+						op2.push_back("\0");
+					}else  if (instruc[instruc.size()-1] == "j"){
+						op2.push_back("\0");
+					}else if (instruc[instruc.size()-1] == "mult"){
+						save2 = token;
+						op2.push_back(save);
+					}else{
+						op2.push_back(token);
+					}
+					aux++;
+
+				}else if(aux == 3){
+					if (instruc[instruc.size()-1] == syscall){
+						 op3.push_back("\0");
+					}else if (instruc[instruc.size()-1] == "j"){
+						op3.push_back("\0");
+					 }else if(instruc[instruc.size()-1] == "mfhi"){
+						op3.push_back("\0");
+					}else if (instruc[instruc.size()-1] == "mult"){
+						op3.push_back(save2);
+					}else{
+						op3.push_back(token);
+					}
+					aux++;
+				}else{
+					aux = 0;
+				}
+			}
+			
 		}
+	}
+	for (unsigned int j = 0; j < instruc.size(); j++){
+		std::cout << instruc[j] << std::endl;
+		std::cout << op1[j] << std::endl;
+		std::cout << op2[j] << std::endl;
+		std::cout << op3[j] << std::endl;
+		std::cout << "---------------------" << std::endl;
 	}
 	filePine.close();
 }
