@@ -47,17 +47,24 @@ void openFile(char** filePipe, std::vector<std::string> *lines){
 			string token;
 			int aux = 0;
 			while (ss >> token){
+				//std::cout << instruc[aux] << std::endl;
 				if (aux == 0){
-					aux++;
+					
 					instruc.push_back(token);
+					aux++;
+					if (token == "syscall"){
+						op1.push_back("$v0");
+						op2.push_back("$v0");
+						op3.push_back("\0");
+					}
 					
 				}else if (aux == 1){
 					//std::cout << instruc[instruc.size()-1] << std::endl;
 					if (instruc[instruc.size()-1] == "syscall"){
-						std::cout << "SYSCALL" << std::endl;
+						std::cout << "SYSCALL 3333" << std::endl;
 						 op1.push_back("$v0");
 						 op2.push_back("$v0");
-						 op3.push_back("\0");
+						 op3.push_back(nullptr);
 						 //break;
 					}else if (instruc[instruc.size()-1] == "mult"){
 						op1.push_back("HI");
